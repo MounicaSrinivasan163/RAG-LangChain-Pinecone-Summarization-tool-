@@ -1,0 +1,10 @@
+streamlit
+pinecone-client>=3.0.0
+crewai
+langchain
+python-dotenv
+pypdf
+pandas
+python-docx
+nltk
+rouge-score
