@@ -1,10 +1,25 @@
-streamlit
-pinecone-client>=3.0.0
-crewai
-langchain
-python-dotenv
-pypdf
-pandas
-python-docx
-nltk
-rouge-score
+streamlit==1.32.2
+python-dotenv==1.0.1
+
+# Pinecone
+pinecone-client==3.0.2
+
+# Embeddings (Pinecone Inference / LLaMA)
+numpy==1.26.4
+
+# PDF / DOCX / CSV loaders
+PyPDF2==3.0.1
+python-docx==1.1.0
+pandas==2.2.2
+
+# Text processing
+tiktoken==0.7.0
+
+# Evaluation
+rouge-score==0.1.2
+nltk==3.8.1
+
+# CrewAI / LLM orchestration
+crewai==0.30.11
+langchain==0.1.20
+langchain-community==0.0.38
