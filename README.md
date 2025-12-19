@@ -1,4 +1,7 @@
 # 📘RAG - DOC Search, Summarization & Evaluation Tool (RAG System)
+---
+Streamlit app link :
+---
 
 ## 🧩 Problem Definition
 
@@ -157,7 +160,14 @@ streamlit run app.py
 - **Modular architecture**: Easy to extend or replace components
 
 ---
+## Screenshots:
 
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/2bc3cb5b-9078-466c-a227-8011e6059d98" />
+
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/f56f81c0-a4f6-4076-a469-aea567cd7e49" />
+
+
+---
 ## 🚀 Future Enhancements
 
 - Multi-document comparative summaries
