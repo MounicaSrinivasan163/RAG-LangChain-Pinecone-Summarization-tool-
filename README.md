@@ -1,196 +1,227 @@
-# 📘RAG - DOC Search, Summarization & Evaluation Tool (RAG System)
+# 📘 RAG-based Document Search, Summarization & Evaluation System
 ---
-Streamlit app link :
+Streamlit APP link:
+
 ---
+A **production-style Retrieval-Augmented Generation (RAG) application** built with **Streamlit**, **Pinecone**, **LangChain**, and **OpenAI**, designed to ingest documents, perform **hybrid retrieval**, generate **ChatGPT-like answers**, and support both **automatic and human evaluation**.
 
-## 🧩 Problem Definition
-
-In many real-world scenarios, users need to quickly search through large volumes of documents (books, reports, PDFs, notes) and obtain concise, meaningful summaries of relevant content. Traditional keyword-based search fails to capture semantic meaning and does not provide synthesized answers.
-
-This project solves the problem by building a **Retrieval-Augmented Generation (RAG)** system that:
-- Semantically indexes documents
-- Retrieves the most relevant chunks for a user query
-- Generates a concise summary using an LLM
-- Evaluates summary quality using ROUGE metrics
-
-The system is designed to be **persistent, scalable, and production-aligned**, where indexed documents remain searchable across sessions.
+This system supports **multi-topic content ingestion** and is not limited to a single domain.
 
 ---
 
-## 🎯 Objectives
+## 🚀 Key Highlights
 
-- Enable semantic search over uploaded documents
-- Avoid duplicate indexing using content hashing
-- Generate query-focused summaries
-- Evaluate summaries using automatic and human evaluation
-- Build an industry-grade RAG pipeline with clean modular design
-
----
-
-## 🧪 Functional Requirements
-
-- Upload and chunk multiple document types (PDF, TXT, CSV, DOCX)
-- Generate embeddings and store them in a vector database
-- Deduplicate content before indexing
-- Perform semantic similarity search
-- Generate summaries using an LLM
-- Evaluate summaries using ROUGE scores
-- Persist indexed data across sessions
+- Multi-format document ingestion (PDF, DOCX, TXT, CSV)
+- Full-document deduplication using content hashing
+- Persistent document registry across sessions
+- Vector-based semantic retrieval (Pinecone)
+- Hybrid retrieval (Vector + BM25-style keyword matching)
+- ChatGPT-style answer generation (answer-focused, not generic summaries)
+- Question-intent-aware responses (advantages, disadvantages, steps, comparisons)
+- ROUGE-based automatic evaluation
+- Industry-style human evaluation stored in CSV
+- CrewAI is **NOT used** (custom LangChain orchestration instead)
 
 ---
 
-## 🛠️ Tools & Technologies Used
+## 🧠 Architecture Overview
 
-| Category | Tools |
-|------|------|
-| Frontend | Streamlit |
-| Vector Database | Pinecone |
-| Embeddings | Local / Free Embedding Model |
-| LLM | OpenAI-compatible LLM (via Agent abstraction) |
-| Chunking | Custom text chunker |
-| Evaluation | ROUGE |
-| Hashing | SHA-256 |
-| Environment | Python, dotenv |
-
----
-
-## 🧠 System Architecture & Approach
-
-### 1️⃣ Document Ingestion
-- Documents are uploaded via Streamlit UI
-- Each document is split into overlapping chunks
-- Each chunk is hashed using **SHA-256** to create a stable ID
-
-### 2️⃣ Deduplicated Indexing
-- Before indexing, Pinecone is checked for existing chunk IDs
-- Duplicate chunks are skipped automatically
-- New chunks are embedded and upserted in batches
-
-### 3️⃣ Semantic Retrieval
-- User query is embedded
-- Top-K similar chunks are retrieved from Pinecone
-- Retrieval works even if indexing is not done in the current session
-
-### 4️⃣ Summarization
-- Retrieved chunks are normalized safely
-- Combined context is sent to the LLM
-- Summary length is controlled by user input
-
-### 5️⃣ Evaluation
-- Generated summaries are evaluated using ROUGE metrics
-- Manual human evaluation guidelines are also provided
+User Query  
+↓  
+Hybrid Retrieval (Vector Similarity + Keyword Matching)  
+↓  
+Context Assembly  
+↓  
+LLM Answer Generation (ChatGPT-style)  
+↓  
+Evaluation (ROUGE + Human Review)
 
 ---
 
-## ✨ Key Features
+## 🗂️ Project Structure
 
-- ✅ Persistent semantic search (session-independent)
-- ✅ SHA-256 based deduplication
-- ✅ Batched Pinecone upserts (safe for size limits)
-- ✅ Robust chunk normalization (prevents NoneType errors)
-- ✅ Explicit user-triggered summarization
-- ✅ Automatic + manual evaluation support
-- ✅ Clean, modular, production-ready codebase
-- ✅ Document-level filtering in retrieval
+```# 📘 RAG-based Document Search, Summarization & Evaluation System
+
+A **production-style Retrieval-Augmented Generation (RAG) application** built with **Streamlit**, **Pinecone**, **LangChain**, and **OpenAI**, designed to ingest documents, perform **hybrid retrieval**, generate **ChatGPT-like answers**, and support both **automatic and human evaluation**.
+
+This system supports **multi-topic content ingestion** and is not limited to a single domain.
 
 ---
 
-## 🧾 Project Structure
+## 🚀 Key Highlights
+
+- Multi-format document ingestion (PDF, DOCX, TXT, CSV)
+- Full-document deduplication using content hashing
+- Persistent document registry across sessions
+- Vector-based semantic retrieval (Pinecone)
+- Hybrid retrieval (Vector + BM25-style keyword matching)
+- ChatGPT-style answer generation (answer-focused, not generic summaries)
+- Question-intent-aware responses (advantages, disadvantages, steps, comparisons)
+- ROUGE-based automatic evaluation
+- Industry-style human evaluation stored in CSV
+- CrewAI is **NOT used** (custom LangChain orchestration instead)
+
+---
+
+## 🧠 Architecture Overview
+
+User Query  
+↓  
+Hybrid Retrieval (Vector Similarity + Keyword Matching)  
+↓  
+Context Assembly  
+↓  
+LLM Answer Generation (ChatGPT-style)  
+↓  
+Evaluation (ROUGE + Human Review)
+
+---
+
+## 🗂️ Project Structure
 
 ```
 RAG/
 │
-├── app.py # Streamlit application entry point
-├── reference_summaries.py # reference text for evaluation
+├── app.py # Streamlit application (UI + orchestration)
+│
+├── docs_loader.py # Persistent document registry (CSV-based)
+│
+├── reference_summaries.py # Gold reference answers for evaluation
 │
 ├── vectorstore/
-│ ├── indexer.py # Chunk embedding & Pinecone indexing
-│ ├── retriever.py # Semantic retrieval logic
-│ ├── embeddings.py # Embedding generation (local/free)
-│ └── pinecone_client.py # Pinecone index existence checks
-│
-├── utils/
-│ ├── file_loader.py # File parsing & chunking
-│ └── hashing.py # SHA-256 content hashing
+│ ├── embeddings.py # Embedding generation (OpenAI)
+│ ├── indexer.py # Chunk upsert + deduplication (Pinecone)
+│ └── retriever.py # Hybrid retrieval logic
 │
 ├── crew/
-│ └── rag_crew.py # LLM / Agent abstraction
+│ └── rag_crew.py # Prompt-engineered RAG answer generation
 │
 ├── evaluation/
-│ └── rouge_eval.py # ROUGE evaluation logic
+│ └── rouge_eval.py # ROUGE score evaluation
 │
-├── .env # Environment variables
-├── requirements.txt # Project dependencies
-└── README.md # Project documentation
-```
-## ⚙️ Environment Variables
-```
-PINECONE_API_KEY=your_pinecone_api_key
-PINECONE_INDEX=your_index_name
-```
+├── utils/
+│ ├── file_loader.py # Document parsing & chunking
+│ └── hashing.py # Content hash for deduplication
+│
+├── indexed_documents.csv # Persistent indexed document registry
+├── human_evaluations.csv # Stored human evaluation results
+│
+├── requirements.txt
+└── README.md
 
-## ▶️ How to Run the Project
-```
-pip install -r requirements.txt
-streamlit run app.py
 ```
 
 
 ---
 
-## 🧪 Evaluation Metrics
+## 📚 Features in Detail
 
-- ROUGE-1
-- ROUGE-2
-- ROUGE-L
-- Human evaluation:
+### 1️⃣ Document Indexing
+- Upload one or more documents
+- Chunking with overlap for context preservation
+- Batched embedding generation
+- Safe Pinecone upserts (batch size controlled)
+- Full-document deduplication using content hash
+- Persistent document registry stored in CSV
+
+---
+
+### 2️⃣ Persistent Document Selection
+- Previously indexed documents are available across sessions
+- Dropdown shows **document names**, not hashes
+- Supports:
+  - Single-document querying
+  - Cross-document querying (“All Documents”)
+
+---
+
+### 3️⃣ Hybrid Retrieval (Vector + Keyword)
+- Semantic similarity via embeddings
+- Keyword relevance via BM25-style matching
+- Improves factual grounding and intent alignment
+- Reduces irrelevant chunk retrieval
+
+---
+
+### 4️⃣ High-Quality Answer Generation
+- ChatGPT-style responses
+- Answer-focused (not summary-heavy)
+- Uses only retrieved context
+- Query-intent aware:
+  - Advantages / Disadvantages
+  - Steps / Processes
+  - Comparisons
+  - Direct factual answers
+- Clean, structured output using bullets or short paragraphs
+
+---
+
+### 5️⃣ Evaluation Layer
+
+#### 🔹 Automatic Evaluation
+- ROUGE-1, ROUGE-2, ROUGE-L
+- Compared against gold reference answers
+
+#### 🔹 Human Evaluation (Industry Style)
+- Ratings for:
   - Relevance
   - Coverage
-  - Coherence
   - Correctness
+  - Faithfulness (hallucination check)
+  - Coherence
+- Evaluator notes
+- Stored persistently in CSV with timestamps
 
 ---
 
-## 🧠 Design Decisions (Why This Approach)
+## 🛠️ Tech Stack
 
-- **Vector DB (Pinecone)**: Enables scalable semantic search
-- **Hash-based IDs**: Prevents duplicate embeddings
-- **Chunking with overlap**: Preserves semantic continuity
-- **Session-independent retrieval**: Aligns with real-world RAG systems
-- **Modular architecture**: Easy to extend or replace components
-
----
-## Screenshots:
-
-<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/2bc3cb5b-9078-466c-a227-8011e6059d98" />
-
-<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/f56f81c0-a4f6-4076-a469-aea567cd7e49" />
-
-
----
-## 🚀 Future Enhancements
-
-- Multi-document comparative summaries
-- Search accuracy metrics (Precision@K, Recall@K)
-- Feedback-based re-ranking
-- UI-based evaluation dashboards
+- UI: Streamlit
+- LLM: OpenAI (via LangChain)
+- Embeddings: OpenAI
+- Vector Database: Pinecone
+- Retrieval: Hybrid (Vector + BM25-style)
+- Evaluation: ROUGE + Human Review
+- Persistence: CSV-based registry
 
 ---
 
-## 📌 Use Cases
+## ❌ What This Project Does NOT Use
 
-- Book summarization
-- Research assistance
-- Knowledge base search
-- Academic and enterprise document analysis
-- Interview-ready RAG project demonstration
+- CrewAI (folder name retained, but orchestration is custom)
+- External managed RAG frameworks
+- Session-only document tracking
+
+This ensures **full transparency and engineering control**.
 
 ---
 
-## 👩‍💻 Author
+## 📈 Use Cases
 
-**Mounica Srinivasan**  
-| Aspiring Data Scientist  
-RAG • NLP • Vector Databases • LLM Applications
+- Internal knowledge base Q&A
+- Learning assistant across mixed topics
+- RAG system prototyping
+- Interview-ready GenAI project
+- Evaluation framework experimentation
+
+---
+
+## 🔮 Future Enhancements
+
+- Chunk-level citation highlighting
+- Retrieval confidence scoring
+- Cross-encoder re-ranking
+- Follow-up question memory
+- Adaptive top-k retrieval
+
+---
+
+## 👤 Author Notes
+
+This project was built with emphasis on:
+- Correct RAG principles
+- Industry-aligned evaluation
+- Debuggability and clarity
 
 
+It demonstrates **practical GenAI engineering**, not just API usage.
