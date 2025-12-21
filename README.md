@@ -1,47 +1,8 @@
 # 📘 RAG-based Document Search, Summarization & Evaluation System
 ---
-Streamlit APP link:
----
-
-A **production-style Retrieval-Augmented Generation (RAG) application** built with **Streamlit**, **Pinecone**, **LangChain**, and **OpenAI**, designed to ingest documents, perform **hybrid retrieval**, generate **ChatGPT-like answers**, and support both **automatic and human evaluation**.
-
-This system supports **multi-topic content ingestion** and is not limited to a single domain.
+Streamlit APP link: https://rag-llm-pinecone-summarization-tool.streamlit.app/
 
 ---
-
-## 🚀 Key Highlights
-
-- Multi-format document ingestion (PDF, DOCX, TXT, CSV)
-- Full-document deduplication using content hashing
-- Persistent document registry across sessions
-- Vector-based semantic retrieval (Pinecone)
-- Hybrid retrieval (Vector + BM25-style keyword matching)
-- ChatGPT-style answer generation (answer-focused, not generic summaries)
-- Question-intent-aware responses (advantages, disadvantages, steps, comparisons)
-- ROUGE-based automatic evaluation
-- Industry-style human evaluation stored in CSV
-- CrewAI is **NOT used** (custom LangChain orchestration instead)
-
----
-
-## 🧠 Architecture Overview
-```
-User Query  
-↓  
-Hybrid Retrieval (Vector Similarity + Keyword Matching)  
-↓  
-Context Assembly  
-↓  
-LLM Answer Generation (ChatGPT-style)  
-↓  
-Evaluation (ROUGE + Human Review)
-```
-
----
-
-## 🗂️ Project Structure
-
-```# 📘 RAG-based Document Search, Summarization & Evaluation System
 
 A **production-style Retrieval-Augmented Generation (RAG) application** built with **Streamlit**, **Pinecone**, **LangChain**, and **OpenAI**, designed to ingest documents, perform **hybrid retrieval**, generate **ChatGPT-like answers**, and support both **automatic and human evaluation**.
 
@@ -93,6 +54,8 @@ RAG/
 │ ├── embeddings.py # Embedding generation (OpenAI)
 │ ├── indexer.py # Chunk upsert + deduplication (Pinecone)
 │ └── retriever.py # Hybrid retrieval logic
+│ └── bm25_store.py # bm25
+│ └── pinecone_client.py # connect to Pinecone index vectorDB
 │
 ├── crew/
 │ └── rag_crew.py # Prompt-engineered RAG answer generation
@@ -187,16 +150,6 @@ RAG/
 
 ---
 
-## ❌ What This Project Does NOT Use
-
-- CrewAI (folder name retained, but orchestration is custom)
-- External managed RAG frameworks
-- Session-only document tracking
-
-This ensures **full transparency and engineering control**.
-
----
-
 ## 📈 Use Cases
 
 - Internal knowledge base Q&A
@@ -222,7 +175,6 @@ This ensures **full transparency and engineering control**.
 This project was built with emphasis on:
 - Correct RAG principles
 - Industry-aligned evaluation
-- Debuggability and clarity
 
 
 It demonstrates **practical GenAI engineering**, not just API usage.
