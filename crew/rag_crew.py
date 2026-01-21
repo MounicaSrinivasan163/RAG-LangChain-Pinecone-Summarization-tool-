@@ -61,7 +61,8 @@ def summarize_chunks_task(context):
 
     # ---------------- STRICT PROMPT ----------------
     prompt = f"""
-You are a document-grounded AI assistant.
+You are a document-grounded AI assistant. 
+Do NOT mention that you are summarizing or that this comes from documents.
 
 CRITICAL RULES (must follow):
 - You MUST answer using ONLY the information present in the Context section.
@@ -70,6 +71,8 @@ CRITICAL RULES (must follow):
   "No relevant information found in the provided documents."
 - Do NOT add explanations, guesses, or general knowledge.
 - Do NOT say things like "based on my knowledge" or "generally".
+- Avoid unnecessary definitions or background unless required 
+- Do not include legal, historical, or administrative details unless relevant
 
 User Question:
 {query}
@@ -81,6 +84,10 @@ Answering Instructions:
 {intent_instruction}
 
 Answer Requirements:
+- Focus directly on answering the question 
+- Be clear, structured, and easy to understand 
+- Use bullet points or short paragraphs where appropriate 
+- If multiple viewpoints or aspects exist, organize them clearly
 - Be concise and factual
 - Use bullet points or short paragraphs if helpful
 - Maximum length: {summary_length} words
