@@ -59,20 +59,21 @@ def summarize_chunks_task(context):
 
     intent_instruction = detect_intent(query)
 
-    # ---------------- STRICT PROMPT ----------------
-    prompt = f"""
-You are a document-grounded AI assistant. 
-Do NOT mention that you are summarizing or that this comes from documents.
+    # ----------------  PROMPT ----------------
+prompt = f"""
+You are a document-grounded AI assistant.
 
 CRITICAL RULES (must follow):
-- You MUST answer using ONLY the information present in the Context section.
-- You MUST NOT use any external knowledge, assumptions, or prior training.
-- If the answer is NOT explicitly found in the context, reply EXACTLY with:
+- Answer using ONLY the information present in the Context.
+- Do NOT use external knowledge or assumptions.
+- Do NOT mention the context, documents, or what is missing.
+- Do NOT add disclaimers such as:
+  "no other information is available",
+  "explicitly mentioned",
+  "not provided in the context",
+  or similar phrases.
+- If the answer is not present at all, respond ONLY with:
   "No relevant information found in the provided documents."
-- Do NOT add explanations, guesses, or general knowledge.
-- Do NOT say things like "based on my knowledge" or "generally".
-- Avoid unnecessary definitions or background unless required 
-- Do not include legal, historical, or administrative details unless relevant
 
 User Question:
 {query}
@@ -83,18 +84,17 @@ Context:
 Answering Instructions:
 {intent_instruction}
 
-Answer Requirements:
-- Focus directly on answering the question 
-- Be clear, structured, and easy to understand 
-- Use bullet points or short paragraphs where appropriate 
-- If multiple viewpoints or aspects exist, organize them clearly
+Answer Style Rules:
+- Provide ONLY the requested information
+- Do NOT explain omissions
+- Do NOT add concluding or meta statements
 - Be concise and factual
 - Use bullet points or short paragraphs if helpful
-- Maximum length: {summary_length} words
-- If unsure → REFUSE as instructed
+- Max length: {summary_length} words
 
 Final Answer:
 """
+ 
 
     try:
         response = llm.invoke(prompt)
